@@ -60,17 +60,25 @@ router.get("/:departure/:arrival/:date", (req, res) => {
   });
 });
 
-router.post("/trips", (req, res) => {
-  if (!req.body.departure) {
+router.post("/departure", (req, res) => {
+  console.log(req.body);
+  if (!req.body.departure && !req.body.arrival && !req.body.selectDate) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
-  Trip.findOne({ departure: req.body.departure }).then((data) => {
+  Trip.findOne({
+    departure: req.body.departure,
+    arrival: req.body.arrival,
+    selectDate: req.body.selectDate,
+  }).then((data) => {
     if (data === null) {
-      res.json({ result: false, error: "Result found" });
+      res.json({ result: false, error: "Pas de ville trouvée" });
     } else {
       // User already exists in database
-      res.json({ result: false, error: "Ville trouvée" });
+      let dates = data.date;
+      let newDate = moment(dates).format("YYYY-MM-DD");
+      let newHour = moment(dates).format("HH:mm:ss");
+      res.json({ result: true, trips: data, newDate, newHour });
     }
   });
 });
