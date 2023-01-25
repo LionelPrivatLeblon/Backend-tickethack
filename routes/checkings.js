@@ -10,8 +10,9 @@ router.get("/", (req, res) => {
   });
 });
 
-router.post("/departure", (req, res) => {
-  if (!req.body.departure && !req.body.arrival && !req.body.selectDate) {
+router.get("/checkings/:_id", (req, res) => {
+  console.log("test");
+  /*if (!req.body.departure && !req.body.arrival && !req.body.selectDate) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
@@ -44,6 +45,23 @@ router.post("/departure", (req, res) => {
         });
       }
     });
+    */
+});
+
+router.post("/checkings", (req, res) => {
+  /*if (!checkBody(req.body, ["email", "password"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+  User.findOne({ email: req.body.email, password: req.body.password }).then(
+    (data) => {
+      if (data) {
+        res.json({ result: true, error: "User existing" });
+      } else {
+        res.json({ result: false, error: "User not found" });
+      }
+    }
+  );*/
 });
 
 module.exports = router;
