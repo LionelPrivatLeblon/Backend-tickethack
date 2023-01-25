@@ -4,6 +4,7 @@ const moment = require("moment");
 
 //const fetch = require("node-fetch");
 const Trip = require("../models/trips.js");
+const Checking = require("../models/checking.js");
 
 router.get("/", (req, res) => {
   Trip.find().then((data) => {
@@ -67,17 +68,16 @@ router.post("/departure", (req, res) => {
     return;
   }
   Trip.findOne({
-    departure: req.body.departure,
-    arrival: req.body.arrival,
+    departure: { $regex: new RegExp(req.body.departure, "i") },
+    arrival: { $regex: new RegExp(req.body.arrival, "i") },
     selectDate: req.body.selectDate,
   }).then((data) => {
     if (data === null) {
       res.json({ result: false, error: "Pas de ville trouvée" });
     } else {
-      // User already exists in database
       let dates = data.date;
-      let newDate = moment(dates).format("YYYY-MM-DD");
-      let newHour = moment(dates).format("HH:mm:ss");
+      let newDate = moment(dates).format("YYYY/MM/DD");
+      let newHour = moment(dates).format("HH:mm");
       res.json({ result: true, trips: data, newDate, newHour });
     }
   });

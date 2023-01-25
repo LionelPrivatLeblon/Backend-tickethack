@@ -8,8 +8,8 @@ const checkingSchema = mongoose.Schema({
   departure: String,
   arrival: String,
   date: Date,
+  hour: Date,
   price: Number,
-  reserved: Boolean,
 });
 
 const checking = mongoose.model("checkings", checkingSchema);
