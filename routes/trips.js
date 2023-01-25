@@ -1,27 +1,24 @@
 var express = require("express");
 var router = express.Router();
+const moment = require("moment");
 
 //const fetch = require("node-fetch");
 const Trip = require("../models/trips.js");
 
 router.get("/", (req, res) => {
   Trip.find().then((data) => {
-    console.log(data);
-    let dates = data.map((e) => e.date);
+    //let dates = data.map((e) => e.date);
 
-    //const moment = require("moment");
+    let dates = data[0].date;
+    let newDate = moment(dates).format("YYYY-MM-DD");
+    let newHour = moment(dates).format("HH:mm:ss");
 
-    dates = moment(new Date("2019/06/01 14:04:03"));
-
-    dates.format("h:mma");
-    //let momentDate = moment(dates, "YYYY-MM-DD HH:mm");
-    // momentObject(2018-02-06T13:35:00+01:00)
-
-    res.json({ trip: dates });
+    //dates.slice(0, 1);
+    res.json({ newDate, newHour });
   });
 });
 
-router.get("/departure/:departure", (req, res) => {
+router.post("/departure/:departure", (req, res) => {
   Trip.findOne({
     departure: { $regex: new RegExp(req.params.departure, "i") },
   }).then((data) => {
@@ -33,7 +30,7 @@ router.get("/departure/:departure", (req, res) => {
   });
 });
 
-router.get("/arrival/:arrival", (req, res) => {
+router.post("/arrival/:arrival", (req, res) => {
   Trip.findOne({
     arrival: { $regex: new RegExp(req.params.arrival, "i") },
   }).then((data) => {
@@ -73,7 +70,7 @@ router.post("/trips", (req, res) => {
       res.json({ result: false, error: "Result found" });
     } else {
       // User already exists in database
-      res.json({ result: false, error: "User already exists" });
+      res.json({ result: false, error: "Ville trouvée" });
     }
   });
 });
